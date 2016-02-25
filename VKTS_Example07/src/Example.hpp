@@ -29,6 +29,8 @@
 
 #include <vkts/vkts.hpp>
 
+#include "BuildCommandTask.hpp"
+
 #define VKTS_EXAMPLE_NAME "Example07"
 
 #define VKTS_NUMBER_DYNAMIC_STATES 2
@@ -47,6 +49,8 @@
 
 #define VKTS_SCENE_NAME "valley_terrain/valley_terrain.vkts"
 
+#define VKTS_NUMBER_TASKS 8
+
 class Example: public vkts::IUpdateThread
 {
 
@@ -55,6 +59,11 @@ private:
 	const int32_t displayIndex;
 
 	const int32_t windowIndex;
+
+	vkts::ICameraSP camera;
+	vkts::IInputControllerSP inputController;
+
+	vkts::SmartPointerVector<vkts::IUpdateableSP> allUpdateables;
 
 	vkts::IInitialResourcesSP initialResources;
 
@@ -84,6 +93,8 @@ private:
 	vkts::IContextSP sceneContext;
 	vkts::ISceneSP scene;
 
+	vkts::SmartPointerVector<IBuildCommandTaskSP> allBuildCommandTasks;
+
 	vkts::ISwapchainSP swapchain;
 
 	vkts::IRenderPassSP renderPass;
@@ -107,7 +118,7 @@ private:
 
 	VkBool32 updateDescriptorSets();
 
-	VkBool32 buildScene(const vkts::ICommandBuffersSP& cmdBuffer);
+	VkBool32 buildScene(const vkts::IUpdateThreadContext& updateContext, const vkts::ICommandBuffersSP& cmdBuffer);
 
 	VkBool32 buildDepthStencilImageView();
 
